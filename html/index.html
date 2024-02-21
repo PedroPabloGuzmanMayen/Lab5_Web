@@ -5,11 +5,24 @@
     </head>
     <body>
         <script type="application/javascript">
+            //Con estas variables guardaremos el usuario y el mensaje
+            let user = ''
+            let message1 = ''
+            //Le damos estilo a la lista de mensajes
             const messagesList = document.createElement('ul')
+            messagesList.style.position = 'fixed'
+            messagesList.style.bottom = '200px'
+            messagesList.style.left = '50%'
+            messagesList.style.transform = 'translateX(-50%)';
+            messagesList.style.height = '300px'
+            messagesList.style.overflowY = 'scroll'
+            messagesList.style.width = '80%'
+            //Esta función nos ayudará a obtener los mensajes de la API
             const getMessages = async () =>{
                 const response = await fetch('https://chat.tiburoncin.lat/messages')
                 const messages = await response.json()
                 messagesList.innerHTML = ''
+                //En esta parte del código, creamos un elemento de lista por cada mensaje que obtuvimos de la API
                 messages.forEach(message => {
                     const messageItem = document.createElement('li')
                     messageItem.append(`${message.username}: ${message.message}`)
@@ -17,6 +30,8 @@
                 })
 
             }
+
+            //Esta función nos ayudará a actualizar los mensajes cada cierto tiempo
             const update = async (getFunction, interval) =>{
                 const execute = async () =>{
                     await getFunction()
@@ -24,12 +39,11 @@
                 }
                 execute()
 
-
             }
-
+            //Este método nos ayudará a enviar mensajes a la API
             const postMessage = async (username, message) =>{
                 const response = await fetch('https://chat.tiburoncin.lat/messages', {
-                    method: 'POST',
+                    method: 'post',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -80,6 +94,16 @@
             messageButton.style.transform = 'translateX(-50%)';
             messageButton.style.width = '80px';
 
+            //Creación del botón que nos ayuda a enviar imagenes
+            const imageButton = document.createElement('input')
+            imageButton.type = 'file'
+            imageButton.append('Imagen')
+            imageButton.style.position = 'fixed'
+            imageButton.style.bottom = '10px'
+            imageButton.style.left = '20%'
+            imageButton.style.transform = 'translateX(-50%)'
+            imageButton.style.width = '80px'
+
             // Event listener para el botón "Continuar"
             continueButton.addEventListener('click', () => {
 
@@ -107,9 +131,10 @@
                     document.body.removeChild(continueButton)
                     document.body.append(messageArea)
                     document.body.append(messageButton)
+                    document.body.append(imageButton)
                     document.body.append(messagesList)
-                    update(getMessages, 1000)
-                    const user = userField.value;
+                    update(getMessages, 100)
+                    user = userField.value;
                     
 
                 }
@@ -118,10 +143,8 @@
 
             // Event listener para el botón de enviar mensaje
             messageButton.addEventListener('click', () => {
-                const message = messageArea.value;
-                const heading = document.createElement('h1')
-                heading.append(message)
-                document.body.append(heading)
+                message = messageArea.value;
+                postMessage(user, message)
 
             })
 
