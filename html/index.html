@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <script type="application/javascript">
+        // Creación del campo de texto para el nombre de usuario
+        const userField = document.createElement('textarea')
+        userField.placeholder = 'Ingresa tu nombre de usuario: '
+        userField.style.position = 'fixed';
+        userField.style.top = '20%'
+        userField.style.left = '50%'
+        userField.style.transform = 'translateX(-50%)';
+        document.body.append(userField)
+
+        // Creación del botón "Continuar"
+        const continueButton = document.createElement('button');
+        continueButton.append('Continuar')
+        continueButton.style.position = 'fixed'
+        continueButton.style.top = '30%'
+        continueButton.style.left = '50%'
+        continueButton.style.transform = 'translateX(-50%)';
+        document.body.append(continueButton)
+
+        // Creación del área de mensaje
+        const messageArea = document.createElement('textarea')
+        messageArea.placeholder = 'Escribe tu mensaje'
+        messageArea.style.position = 'fixed'
+        messageArea.style.bottom = '70px'
+        messageArea.style.left = '50%'
+        messageArea.style.transform = 'translateX(-50%)'
+        messageArea.style.width = '80%'
+
+
+        // Creación del botón de enviar mensaje
+        const messageButton = document.createElement('button')
+        messageButton.append('Enviar');
+        messageButton.style.position = 'fixed';
+        messageButton.style.bottom = '10px';
+        messageButton.style.left = '50%';
+        messageButton.style.transform = 'translateX(-50%)';
+        messageButton.style.width = '80px';
+
+
+        // Event listener para el botón "Continuar"
+        continueButton.addEventListener('click', () => {
+            // Remover los elementos del nombre de usuario y del botón "Continuar"
+            document.body.removeChild(userField)
+            document.body.removeChild(continueButton)
+            document.body.append(messageArea)
+            document.body.append(messageButton)
+
+            // Verificar si se ingresó un nombre de usuario
+            if(userField.value === '') {
+                alert('Debes ingresar un nombre de usuario')
+                return
+            }
+
+            // Agregar el área de mensaje y el botón de enviar mensaje
+            const user = userField.value;
+            document.body.append(messageArea)
+            document.body.append(messageButton)
+        });
+
+        // Event listener para el botón de enviar mensaje
+        messageButton.addEventListener('click', () => {
+            const message = messageArea.value;
+            const heading = document.createElement('h1')
+            heading.append(message)
+            document.body.append(heading)
+        })
+    </script>
+</body>
+</html>
