@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+        <title>Chat</title>
     </head>
     <body>
         <script type="application/javascript">
@@ -9,15 +9,40 @@
             const getMessages = async () =>{
                 const response = await fetch('https://chat.tiburoncin.lat/messages')
                 const messages = await response.json()
+                messagesList.innerHTML = ''
                 messages.forEach(message => {
                     const messageItem = document.createElement('li')
-                    messageItem.append(message.message)
+                    messageItem.append(`${message.username}: ${message.message}`)
                     messagesList.append(messageItem)
                 })
 
             }
+            const update = async (getFunction, interval) =>{
+                const execute = async () =>{
+                    await getFunction()
+                    setTimeout(execute, interval)
+                }
+                execute()
 
-            let alertCond = false //Esta variable nos ayudará a verificar 
+
+            }
+
+            const postMessage = async (username, message) =>{
+                const response = await fetch('https://chat.tiburoncin.lat/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        message: message
+                    })
+                })
+                const data = await response.json()
+                console.log(data)
+            }
+
+            let alertCond = false //Esta variable nos ayudará a verificar si el usuario ingreso un nombre de usuario no valido
             // Creación del campo de texto para el nombre de usuario
             const userField = document.createElement('textarea')
             userField.placeholder = 'Ingresa tu nombre de usuario: '
@@ -77,12 +102,15 @@
                         document.body.removeChild(document.querySelector('h1'))
                     }
                     //Si el usuario ingresó un nombre valido, eliminamos los campos de registro de usuario y creamos botones pra enviar mensajes
+                    
                     document.body.removeChild(userField)
                     document.body.removeChild(continueButton)
                     document.body.append(messageArea)
                     document.body.append(messageButton)
+                    document.body.append(messagesList)
+                    update(getMessages, 1000)
                     const user = userField.value;
-                    getMessages()
+                    
 
                 }
 
@@ -94,7 +122,10 @@
                 const heading = document.createElement('h1')
                 heading.append(message)
                 document.body.append(heading)
+
             })
+
+            
             
         </script>
     </body>
