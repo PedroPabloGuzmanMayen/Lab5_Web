@@ -6,6 +6,7 @@
     <body>
         <script type="application/javascript">
             //Con estas variables guardaremos el usuario y el mensaje
+            console.log('Hola '.length)
             let user = ''
             let message1 = ''
             //Le damos estilo a la lista de mensajes
@@ -133,7 +134,7 @@
                     document.body.append(messageButton)
                     document.body.append(imageButton)
                     document.body.append(messagesList)
-                    update(getMessages, 100)
+                    update(getMessages, 5000)
                     user = userField.value;
                     
 
@@ -143,9 +144,22 @@
 
             // Event listener para el botón de enviar mensaje
             messageButton.addEventListener('click', () => {
+
+                if (messageArea.value === ''  ||  messageArea.value.lenght > 140){
+                    
+                }
+                else{
+
+                    postMessage(user, messageArea.value)
+                    messageArea.value = ''
+                }
+                
+
+            })
+            messageArea.addEventListener('enter', () => {
                 message = messageArea.value;
                 postMessage(user, message)
-
+                messageArea.value = ''
             })
 
             
