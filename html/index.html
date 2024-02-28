@@ -5,8 +5,18 @@
     </head>
     <body>
         <script type="application/javascript">
+            //Se usa localstorage para determinar el tema de preferencia (15pts)
+            //Si el tema es oscuro, cambiamos el color de fondo y el color de la letra
+            if (localStorage.getItem('theme') === 'dark'){
+                document.body.style.backgroundColor = 'black'
+                document.body.style.color = 'white'
+            }
+            else{
+                document.body.style.backgroundColor = 'white'
+                document.body.style.color = 'black'
+            }
+            
             //Con estas variables guardaremos el usuario y el mensaje
-            console.log('Hola '.length)
             let user = ''
             let message1 = ''
             //Le damos estilo a la lista de mensajes
@@ -33,6 +43,7 @@
             }
 
             //Esta función nos ayudará a actualizar los mensajes cada cierto tiempo
+            //Se usa async y await 20 pts, además se implementa el auto refesh (10 pts)
             const update = async (getFunction, interval) =>{
                 const execute = async () =>{
                     await getFunction()
@@ -43,7 +54,7 @@
             }
             //Este método nos ayudará a enviar mensajes a la API
             const postMessage = async (username, message) =>{
-                //Si el mesnaje esta vacio o es mayor a 140 caracteres mostramos un mensaje de alerta
+                //Si el mesnaje esta vacio o es mayor a 140 caracteres mostramos un mensaje de alerta (10 pts)
                 if (message === '' || message.length > 140){
                     alert('Por favor ingresa un mensaje valido')
                 }
@@ -61,9 +72,6 @@
                     }) 
                     messageArea.value = ''  
                 }
-
-                //const data = await response.json()
-                //console.log(data)
             }
 
             let alertCond = false //Esta variable nos ayudará a verificar si el usuario ingreso un nombre de usuario no valido
@@ -85,7 +93,7 @@
             continueButton.style.transform = 'translateX(-50%)';
             document.body.append(continueButton)
 
-            // Creación del área de mensaje
+            // Creación del área de mensaje (está en la parte inferior y no desaparece con cada mensaje)
             const messageArea = document.createElement('textarea')
             messageArea.placeholder = 'Escribe tu mensaje'
             messageArea.style.position = 'fixed'
@@ -114,6 +122,15 @@
             imageButton.style.transform = 'translateX(-50%)'
             imageButton.style.width = '80px'
 
+            //Creación del botón que nos ayuda a cambiar el tema
+            const changeThemeButton = document.createElement('button');
+            changeThemeButton.append('Cambiar tema')
+            changeThemeButton.style.position = 'fixed'
+            changeThemeButton.style.top = '10px'
+            changeThemeButton.style.left = '50%';
+            changeThemeButton.style.transform = 'translateX(-50%)'
+
+
             // Event listener para el botón "Continuar"
             continueButton.addEventListener('click', () => {
 
@@ -139,6 +156,7 @@
                     
                     document.body.removeChild(userField)
                     document.body.removeChild(continueButton)
+                    document.body.append(changeThemeButton)
                     document.body.append(messageArea)
                     document.body.append(messageButton)
                     document.body.append(imageButton)
@@ -156,6 +174,7 @@
                 postMessage(user, messageArea.value)
 
             })
+
             //Agregamos un evento para que el usuario pueda enviar mensajes con la tecla enter
             messageArea.addEventListener('keydown', (e) => {
                 if (e.keyCode === 13 && !e.shiftKey){
@@ -169,6 +188,20 @@
                 if (messageArea.value.includes('http')){
                     console.log('Imagen')
                     messageArea.value = "hola"
+                }
+            })
+
+                //Agregamos un evento para el botón que cambia el tema
+            changeThemeButton.addEventListener('click', () => {
+                if (localStorage.getItem('theme') === 'clear'){
+                    document.body.style.backgroundColor = 'black'
+                    document.body.style.color = 'white'
+                    localStorage.setItem('theme', 'dark')
+                }
+                else{
+                    document.body.style.backgroundColor = 'white'
+                    document.body.style.color = 'black'
+                    localStorage.setItem('theme', 'clear')
                 }
             })
 
