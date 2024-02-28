@@ -43,7 +43,13 @@
             }
             //Este método nos ayudará a enviar mensajes a la API
             const postMessage = async (username, message) =>{
-                const response = await fetch('https://chat.tiburoncin.lat/messages', {
+                //Si el mesnaje esta vacio o es mayor a 140 caracteres mostramos un mensaje de alerta
+                if (message === '' || message.length > 140){
+                    alert('Por favor ingresa un mensaje valido')
+                }
+                //Si el mensaje no esta vacio y es menor a 140 caracteres lo enviamos a la API
+                else{
+                    const response = await fetch('https://chat.tiburoncin.lat/messages', {
                     method: 'post',
                     headers: {
                         'Content-Type': 'application/json'
@@ -52,9 +58,12 @@
                         username: username,
                         message: message
                     })
-                })
-                const data = await response.json()
-                console.log(data)
+                    }) 
+                    messageArea.value = ''  
+                }
+
+                //const data = await response.json()
+                //console.log(data)
             }
 
             let alertCond = false //Esta variable nos ayudará a verificar si el usuario ingreso un nombre de usuario no valido
@@ -144,22 +153,13 @@
 
             // Event listener para el botón de enviar mensaje
             messageButton.addEventListener('click', () => {
-
-                if (messageArea.value === ''  ||  messageArea.value.lenght > 140){
-                    
-                }
-                else{
-
-                    postMessage(user, messageArea.value)
-                    messageArea.value = ''
-                }
-                
+                postMessage(user, messageArea.value)
 
             })
+            //Agregamos un evento para que el usuario pueda enviar mensajes con la tecla enter
             messageArea.addEventListener('keydown', (e) => {
                 if (e.keyCode === 13 && !e.shiftKey){
                     postMessage(user, messageArea.value)
-                    messageArea.value = ''
                 }
                 else if (e.keyCode === 13 && e.shiftKey){
                     messageArea.value += '\n'
