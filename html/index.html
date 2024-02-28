@@ -157,9 +157,12 @@
 
             })
             messageArea.addEventListener('keydown', (e) => {
-                if (e.keyCode === 13){
+                if (e.keyCode === 13 && !e.shiftKey){
                     postMessage(user, messageArea.value)
                     messageArea.value = ''
+                }
+                else if (e.keyCode === 13 && e.shiftKey){
+                    messageArea.value += '\n'
                 }
             })
             messageArea.addEventListener('input', () => {
