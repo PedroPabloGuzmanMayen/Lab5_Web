@@ -156,10 +156,17 @@
                 
 
             })
-            messageArea.addEventListener('enter', () => {
-                message = messageArea.value;
-                postMessage(user, message)
-                messageArea.value = ''
+            messageArea.addEventListener('keydown', (e) => {
+                if (e.keyCode === 13){
+                    postMessage(user, messageArea.value)
+                    messageArea.value = ''
+                }
+            })
+            messageArea.addEventListener('input', () => {
+                if (messageArea.value.includes('http')){
+                    console.log('Imagen')
+                    messageArea.value = "hola"
+                }
             })
 
             
