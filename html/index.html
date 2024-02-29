@@ -26,7 +26,7 @@
             messagesList.style.left = '50%'
             messagesList.style.transform = 'translateX(-50%)';
             messagesList.style.height = '300px'
-            messagesList.style.overflowY = 'scroll'
+            messagesList.style.overflowY = 'scroll' //Preservamos el scroll de la lista de mensajes (20 pts)
             messagesList.style.width = '80%'
             //Esta función nos ayudará a obtener los mensajes de la API
             const getMessages = async () =>{
@@ -36,6 +36,7 @@
                 //En esta parte del código, creamos un elemento de lista por cada mensaje que obtuvimos de la API
                 messages.forEach(message => {
                     const messageItem = document.createElement('li')
+                    messageItem.backgroundColor = 'blue'
                     messageItem.append(`${message.username}: ${message.message}`)
                     messagesList.append(messageItem)
                 })
@@ -74,6 +75,40 @@
                 }
             }
 
+            const continueFunc = ()=>{
+                // Verificar si se ingresó un nombre de usuario válido
+                if(userField.value === '') {
+                    const alert = document.createElement('h1')
+                    alert.append('Por favor ingresa un nombre de usuario válido')
+                    alert.style.position = 'fixed'
+                    alert.style.top = '40%'
+                    alert.style.left = '50%'
+                    alert.style.transform = 'translateX(-50%)'
+                    alert.style.color = 'red'
+                    document.body.append(alert)
+                    alertCond = true
+                }
+                else{
+                    if (alertCond){
+                        document.body.removeChild(document.querySelector('h1'))
+                    }
+                    //Si el usuario ingresó un nombre valido, eliminamos los campos de registro de usuario y creamos botones pra enviar mensajes
+                    
+                    document.body.removeChild(userField)
+                    document.body.removeChild(continueButton)
+                    document.body.append(changeThemeButton)
+                    document.body.append(messageArea)
+                    document.body.append(messageButton)
+                    document.body.append(messagesList)
+                    update(getMessages, 5000)
+    
+                    user = userField.value;
+
+                }
+            }
+
+            
+
             let alertCond = false //Esta variable nos ayudará a verificar si el usuario ingreso un nombre de usuario no valido
             // Creación del campo de texto para el nombre de usuario
             const userField = document.createElement('textarea')
@@ -83,6 +118,15 @@
             userField.style.left = '50%'
             userField.style.transform = 'translateX(-50%)';
             document.body.append(userField)
+
+            userField.addEventListener('keydown', (e) => {
+                if (e.keyCode === 13 && !e.shiftKey){
+                    continueFunc()
+                }
+                else if (e.keyCode === 13 && e.shiftKey){
+                    userField.value += '\n'
+                }
+            })
 
             // Creación del botón "Continuar"
             const continueButton = document.createElement('button');
@@ -112,15 +156,6 @@
             messageButton.style.transform = 'translateX(-50%)';
             messageButton.style.width = '80px';
 
-            //Creación del botón que nos ayuda a enviar imagenes
-            const imageButton = document.createElement('input')
-            imageButton.type = 'file'
-            imageButton.append('Imagen')
-            imageButton.style.position = 'fixed'
-            imageButton.style.bottom = '10px'
-            imageButton.style.left = '20%'
-            imageButton.style.transform = 'translateX(-50%)'
-            imageButton.style.width = '80px'
 
             //Creación del botón que nos ayuda a cambiar el tema
             const changeThemeButton = document.createElement('button');
@@ -133,40 +168,7 @@
 
             // Event listener para el botón "Continuar"
             continueButton.addEventListener('click', () => {
-
-            
-
-                // Verificar si se ingresó un nombre de usuario válido
-                if(userField.value === '') {
-                    const alert = document.createElement('h1')
-                    alert.append('Por favor ingresa un nombre de usuario válido')
-                    alert.style.position = 'fixed'
-                    alert.style.top = '40%'
-                    alert.style.left = '50%'
-                    alert.style.transform = 'translateX(-50%)'
-                    alert.style.color = 'red'
-                    document.body.append(alert)
-                    alertCond = true
-                }
-                else{
-                    if (alertCond){
-                        document.body.removeChild(document.querySelector('h1'))
-                    }
-                    //Si el usuario ingresó un nombre valido, eliminamos los campos de registro de usuario y creamos botones pra enviar mensajes
-                    
-                    document.body.removeChild(userField)
-                    document.body.removeChild(continueButton)
-                    document.body.append(changeThemeButton)
-                    document.body.append(messageArea)
-                    document.body.append(messageButton)
-                    document.body.append(imageButton)
-                    document.body.append(messagesList)
-                    update(getMessages, 5000)
-                    user = userField.value;
-                    
-
-                }
-
+                continueFunc()
             })
 
             // Event listener para el botón de enviar mensaje
