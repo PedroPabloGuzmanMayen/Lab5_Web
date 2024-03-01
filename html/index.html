@@ -5,6 +5,8 @@
     </head>
     <body>
         <script type="application/javascript">
+
+            
             //Se usa localstorage para determinar el tema de preferencia (15pts)
             //Si el tema es oscuro, cambiamos el color de fondo y el color de la letra
             if (localStorage.getItem('theme') === 'dark'){
@@ -77,7 +79,7 @@
 
             const continueFunc = ()=>{
                 // Verificar si se ingresó un nombre de usuario válido
-                if(userField.value === '') {
+                if(!userField.value.trim().match(/[a-zA-Z0-9]/)) {
                     const alert = document.createElement('h1')
                     alert.append('Por favor ingresa un nombre de usuario válido')
                     alert.style.position = 'fixed'
@@ -137,7 +139,7 @@
             continueButton.style.transform = 'translateX(-50%)';
             document.body.append(continueButton)
 
-            // Creación del área de mensaje (está en la parte inferior y no desaparece con cada mensaje)
+            // Creación del área de mensaje (está en la parte inferior y no desaparece con cada mensaje) (10 pts)
             const messageArea = document.createElement('textarea')
             messageArea.placeholder = 'Escribe tu mensaje'
             messageArea.style.position = 'fixed'
@@ -177,7 +179,7 @@
 
             })
 
-            //Agregamos un evento para que el usuario pueda enviar mensajes con la tecla enter
+            //Agregamos un evento para que el usuario pueda enviar mensajes con la tecla enter (10pts)
             messageArea.addEventListener('keydown', (e) => {
                 if (e.keyCode === 13 && !e.shiftKey){
                     postMessage(user, messageArea.value)
